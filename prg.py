@@ -48,6 +48,9 @@ def ArgParsing():
                                                                              "kill mal-process and remove-file")
     # Parse options and read directory arguments from the command line
     (options, args) = parser.parse_args()
+    if len(args) == 0:
+        parser.print_help()
+        sys.exit(1)
 
     if args[0] == 'start':
         return args[0], None, options
