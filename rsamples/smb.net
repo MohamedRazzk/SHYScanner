@@ -1,0 +1,8 @@
+[guest]
+        # This share allows anonymous (guest) access
+        # without authentication!
+        path = /srv/samba/guest/
+        read only = no
+        guest ok = yes
+        guest only = yes
+

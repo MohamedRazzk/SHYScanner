@@ -9,6 +9,8 @@ from scnner import FileScan_F
 from scnner import Yscan
 from scnner import Hscan
 from scnner import FullScan
+from ntwrk import nscan
+from netmon import yaracapscan
 import concurrent.futures
 
 
@@ -16,7 +18,7 @@ def main():
     operation, dirs, options = ArgParsing()
     if operation == 'scan':
         if not options.SignatureBase and not options.YaraRules and not options.hu:
-            FullScan(dirs, options.full)
+            FullScan(dirs, options.full, options.quarantine)
 
         elif options.SignatureBase and not options.YaraRules and not options.hu:
             SigScan(dirs, options.SignatureBase)
@@ -36,6 +38,14 @@ def main():
                 options.remove = True
             executer.submit(ProcScan_F, options.killer)
             executer.submit(FileScan_F, options.remove)
+
+    elif operation == 'net':
+        if options.monitor:
+            yaracapscan()
+        else:
+            while True:
+                nscan()
+                print('\n')
 
 
 if __name__ == "__main__":

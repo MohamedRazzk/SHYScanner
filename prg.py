@@ -27,7 +27,7 @@ def ArgParsing():
 
     # Define the options taken by the script
     parser = optparse.OptionParser(
-        usage="\n\t%prog scan Directory \nOR\n\t%prog scan File\nOR\n\t%prog start",
+        usage="\n\t%prog scan Directory \nOR\n\t%prog scan File\nOR\n\t%prog start\nOR\n\t%prog net",
     )
     parser.add_option(
         "-s", "--signature", dest="SignatureBase", type='string',
@@ -46,6 +46,10 @@ def ArgParsing():
                                                                                  "start monitor\n")
     parser.add_option("-f", "--full", action="store_true", dest="full", help="full monitoring detection and prevention"
                                                                              "kill mal-process and remove-file")
+    parser.add_option("-m", "--mon", action="store_true", dest="monitor", help="full monitoring detection for network "
+                                                                               "trafic ")
+    parser.add_option("-q", "--quar", action="store_true", dest="quarantine", help="quarantine malware files")
+
     # Parse options and read directory arguments from the command line
     (options, args) = parser.parse_args()
     if len(args) == 0:
@@ -53,6 +57,9 @@ def ArgParsing():
         sys.exit(1)
 
     if args[0] == 'start':
+        return args[0], None, options
+
+    elif args[0] == 'net':
         return args[0], None, options
 
     if len(args) < 2:

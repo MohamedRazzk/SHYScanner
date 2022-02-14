@@ -14,6 +14,7 @@ from yarascan import YaraRules
 import time
 import fnmatch
 from mon import KillProcTree
+from quar import quar
 
 malwarebase = "malbase/sigbase.md5"  # defualt malware base signature
 yarabase = 'yararules'  # defualt yararules Folder
@@ -201,7 +202,7 @@ def FileScan_F(RemoveOption):
     FileScanner(RemoveOption)
 
 
-def FullScan(dirs, FullOption):
+def FullScan(dirs, FullOption, QuarOption):
     signaturedb = HashDb(malwarebase, None)
     yararules = YaraRules(yarabase)
 
@@ -210,9 +211,12 @@ def FullScan(dirs, FullOption):
         huercheck = HuerstCheck(dirs)
         yarcheck = YaraCheck(dirs, yararules)
         printfunc(dirs, sigcheck, huercheck, yarcheck)
-        if FullOption:
-            if sigcheck or huercheck or yarcheck:
+
+        if sigcheck or huercheck or yarcheck:
+            if FullOption:
                 os.remove(dirs)
+            elif QuarOption:
+                quar(dirs)
 
     elif os.path.isdir(dirs):
         filelist = recscan(dirs, '*')
@@ -222,6 +226,9 @@ def FullScan(dirs, FullOption):
             huercheck = HuerstCheck(file)
             yarcheck = YaraCheck(file, yararules)
             printfunc(file, sigcheck, huercheck, yarcheck)
-            if FullOption:
-                if sigcheck or huercheck or yarcheck:
+
+            if sigcheck or huercheck or yarcheck:
+                if FullOption:
                     os.remove(file)
+                elif QuarOption:
+                    quar(file)
